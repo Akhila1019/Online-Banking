@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<main class="container">
+  {# <!-- <div class="card" style="background-color: rgb(240, 234, 227);width: 100%;height: auto;"> --> #}
+    
+        <div class="section-content">
+          <div class="card-header" style="height:4rem; background-color: rgb(212, 184, 111);">
+            <h3 style="color: black;">User Registration</h3>
+          </div>
+          <div style="font-size: medium;">
+            <br>
+            <span class="req" style="margin-left: 20px;">*</span>Required
+          </div>
+          <div class="card-body" style="font-size: large;" >
+            <form id="myForm1" method="POST" action="/register" >
+              {{ form.hidden_tag }}
+              <div class="form-row">
+                {{ form.accno.label(class="col-2",style="color: blue;")}}
+                <span class="req" style="margin-left: -70px;margin-right: 60px;">*</span>
+                {{ form.accno(style="width: 375px;")}}
+              </div></br></br>
+              <div class="form-row">
+                {{ form.cifno.label(class="col-2",style="color: blue;")}}
+                <span class="req" style="margin-left: -113px;margin-right: 100px;">*</span>
+                {{ form.cifno(style="width: 375px;")}}
+              </div></br></br>
+              <div class="form-row">
+                {{ form.branchcode.label(class="col-2",style="color: blue;")}}
+                <span class="req" style="margin-left: -110px;margin-right: 98px;">*</span>
+                {{ form.branchcode(style="width: 375px;") }}
+              </div></br></br>
+              <div class="form-row">
+                {{ form.country.label(class="col-2",style="color: blue;")}}
+                <span class="req" style="margin-left: -148px;margin-right: 130px;">*</span>
+                {{ form.country(style="width: 375px;")}}
+              </div></br></br>
+              <div class="form-row">
+                {{ form.phone.label(class="col-2",style="color: blue;")}}
+                <span class="req" style="margin-left: -86px;margin-right: 70px;">*</span>
+                {{ form.phone(style="width: 375px;")}}
+              </div></br></br>
+              <div class="form-row">
+                {{ form.facility.label(class="col-2",style="color: blue;")}}
+                <span class="req" style="margin-left: -76px;margin-right: 60px;">*</span>
+                {{ form.facility(style="width: 375px;")}}
+              </div></br></br>
+              {#  <!-- <div class="form-row">
+                {{ form.recaptcha(style="width: 375px;") }}
+              </div></br></br> --> #}
+              <script src="static/js/intlTelInput.js"></script>
+              <script>
+              var input = document.querySelector("#phone");
+              intlTelInput(input, {
+                  utilsScript: "static/js/utils.js"
+              });
+              </script>
+              <div style="text-align: center;">
+                {{ form.submit(class="btn btn-primary") }}
+              </div>
+          </div>
+        </div>    
+    </main>
+
+{% endblock %}
