@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block content %}
+
+      <div class="card" style="background-color: rgb(240, 234, 227);width: 100%;height: auto;">
+        <div class="card-header" style="height:5rem; background-color: rgb(212, 184, 111);">
+            <h3 style="color: black;">Enter the one time password sent to your mobile number.</h3>
+        </div>
+          <div style="font-size: medium;">
+            <br>
+            <span class="req" style="margin-left: 20px;">*</span>Required
+          </div>
+          <div class="card-body" style="font-size: large;" >
+            <form id="myForm2" method="POST" action="{{ url_for('otp',param=param) }} " class="Form">
+              {{ form.hidden_tag }}
+                <div class="form-row">
+                  {{ form.otp.label(class="col-3",style="color: blue;")}}
+                  <span class="req" style="margin-left: -80px;margin-right: 100px;">*</span>
+                  {{ form.otp(class="col-3") }}
+                </div></br></br>
+
+                <div style="margin-left: 500px;">
+                  {{ form.submit(class="btn btn-primary mb-3 col-2") }}
+                </div>
+                <div class="card w-100">
+                    <div class="card-body" style="background-color: rgb(228, 197, 186);">
+                        <p style="color: black;">If you have not received the High security password on SMS then you can</p>
+                        {{ form.resend(class="form-group btn btn-primary mr-3 col-2") }}
+                    </div>
+                </div>
+            </form>
+          </div>
+        </div>      
+{% endblock %}
