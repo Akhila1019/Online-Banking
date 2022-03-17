@@ -8,8 +8,7 @@ db = SQLAlchemy()
 
 class Credentials(db.Model):
     __tablename__ = 'credentials'
-    uid = db.Column(db.Integer,primary_key = True)
-    username = db.Column(db.String(100))
+    username = db.Column(db.String(100),primary_key = True)
     pwdhash = db.Column(db.String(100))
 
     def __init__(self,username,password):
@@ -24,7 +23,7 @@ class Credentials(db.Model):
 
 class Registration(db.Model):
     __tablename__ = 'users'
-    uid = db.Column(db.Integer,primary_key = True)
+    username = db.Column(db.String(100),primary_key = True)
     account_number = db.Column(db.String(100))
     cif_number = db.Column(db.String(100))
     branch_code = db.Column(db.Integer())
@@ -32,7 +31,8 @@ class Registration(db.Model):
     phone = db.Column(db.Integer())
     facility = db.Column(db.String(100))
 
-    def __init__(self,accno,cifno,branchcode,country,phone,facility):
+    def __init__(self,username,accno,cifno,branchcode,country,phone,facility):
+        self.username = username
         self.account_number = accno
         self.cif_number = cifno
         self.branch_code = branchcode
@@ -41,4 +41,11 @@ class Registration(db.Model):
         self.facility = facility
         
 
+class RequestPancard(db.Model):
+    __tablename__ = 'panrequest'
+    username = db.Column(db.String(100),primary_key = True)
+    pan_number = db.Column(db.String(100))
 
+    def __init__(self,username,pan):
+        self.username = username
+        self.pan_number = pan
