@@ -1,0 +1,17 @@
+{% extends "panlayout.html" %}
+
+{% block content %}
+<form method="POST" action="/confirmpan">
+    <div class="form-row">
+        <p class="col-3" style="color: blue;">Name </p>  
+        <div style="margin-top: -40px;"><b style="margin-left: 240px;">{{ details[0] }}</b></div><br>
+        <p class="col-3" style="color: blue;">CIF number </p>  
+        <div style="margin-top: -40px;"><b style="margin-left: 240px;">{{ details[1] }}</b></div><br>
+        <p class="col-3" style="color: blue;">PAN number </p>  
+        <div style="margin-top: -40px;"><b style="margin-left: 240px;">{{ session['pan_form']['pan'] }}</b></div><br>
+    </div></br>
+    <button type="submit" class="btn btn-primary">Confirm</button>
+</form>
+    <button class="btn btn-danger" style="margin-top: -68px;margin-left: 120px ;" onclick="location.href='home'">Cancel</button>
+
+{% endblock %}
