@@ -1,3 +1,3 @@
-function resetForm() {
-        document.getElementById("myForm5").reset();
+function resetForm(Id) {
+        document.getElementById(Id).reset();
 }
