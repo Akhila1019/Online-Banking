@@ -58,11 +58,7 @@ class PancardForm(Form):
     username = StringField()
     password = PasswordField('Enter password',validators=[DataRequired("Please enter your password."),ValidPassword(other='username')])
     submit = SubmitField('Submit')
-
-    
-
-    
-                
+         
 
 class EnterPanForm(Form):
     pan = StringField('PAN',validators=[DataRequired("Please enter your PAN number.")])
