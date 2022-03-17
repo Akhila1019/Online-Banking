@@ -1,16 +1,7 @@
-from itertools import islice
-
-def chunks(data, SIZE=10000):
-   it = iter(data)
-   for i in range(0, len(data), SIZE):
-      yield {k:data[k] for k in islice(it, SIZE)}
-
-
 #  import Flask class
-from urllib import response
 from flask import Flask, redirect,render_template,request, url_for,session
-from models import Registration, db,Credentials
-from forms import SignupForm,OTPForm,ATMForm,UserForm,PancardForm
+from models import Registration, db,Credentials,RequestPancard
+from forms import SignupForm,OTPForm,ATMForm,UserForm,PancardForm,EnterPanForm
 
 # Create instance from Flask class
 app = Flask(__name__)
@@ -27,13 +18,22 @@ app.secret_key = "development-key"
 def home():    
     session.pop('username',None)
     session.pop('reg_form',None)
+    session.pop('pan_card',None)
+    session.pop('pan_form',None)
     return 'render_template("home.html")'
 
-@app.route("/success")
-def success():
+@app.route("/success<param>")
+def success(param):
     if 'reg_form' not in session:
             return redirect(url_for('register'))
-    return render_template("success.html")
+    if 'username' not in session:
+            return redirect(url_for('register'))
+    if param == 'username':
+        return render_template("success.html",msg="Successfully registered for Internet Banking :)")
+    if param == 'pancard':
+        if 'pan_card' not in session:
+            return redirect(url_for('pancard'))
+        return render_template("success.html",msg="Pan card add/update request is accepted successfully and will be validated by branch shortly.")
 
 @app.route("/username",methods=['GET','POST'])
 def username():
@@ -41,7 +41,7 @@ def username():
         if 'reg_form' not in session:
             return redirect(url_for('register'))
         elif 'username' in session:
-            return redirect(url_for('success'))
+            return redirect(url_for('success',param='username'))
         
         form = UserForm()
         return render_template("username.html",form=form)
@@ -50,21 +50,18 @@ def username():
         if form.validate() == False:
             return render_template('username.html',form=form)
         else:
+
             newuser = Credentials(form.username.data,form.password.data)   # Create new user
             db.session.add(newuser) # Add new user to DB
             db.session.commit()     # Save changes to DB
-
-            session['username'] = form.username
-
+            
+            session['username'] = request.form.get('username')
             reg_form = session['reg_form']
-            newuser = Registration(reg_form['accno'],reg_form['cifno'],reg_form['branchcode'],reg_form['country'],reg_form['phone'],reg_form['facility'])   # Create new user
+            
+            newuser = Registration(session['username'],reg_form['accno'],reg_form['cifno'],reg_form['branchcode'],reg_form['country'],reg_form['phone'],reg_form['facility'])   # Create new user
             db.session.add(newuser) # Add new user to DB
             db.session.commit()     # Save changes to DB 
-
-
-            
-
-            return redirect(url_for('success'))
+            return redirect(url_for('success',param='username'))
 
 @app.route("/atm",methods=['GET','POST'])
 def atm():
@@ -72,7 +69,7 @@ def atm():
         if 'reg_form' not in session:
             return redirect(url_for('register'))
         elif 'username' in session:
-            return redirect(url_for('success'))
+            return redirect(url_for('success',param='username'))
         form = ATMForm()
         return render_template("atm.html",form=form)
     elif request.method == 'POST':
@@ -91,7 +88,7 @@ def otp(param):
         if 'reg_form' not in session:
             return redirect(url_for('register'))
         elif 'username' in session:
-            return redirect(url_for('success'))
+            return redirect(url_for('success',param='username'))
         form = OTPForm()
         return render_template("otp.html",form=form,param=param)
     elif request.method == 'POST':
@@ -106,11 +103,12 @@ def otp(param):
             # session['email'] = newuser.email
             if param == 'register':
                 return redirect(url_for('atm'))
+            elif param == 'pancard':
+                return redirect(url_for('panenter'))
 
 @app.route("/register",methods=['GET','POST'])
 def register():
     if request.method == 'POST':
-        print(request.form)
         form = SignupForm(request.form) 
         if form.validate() == False:
             return render_template('register.html',form=form)
@@ -118,15 +116,61 @@ def register():
             # newuser = Registration(form.accno.data,form.cifno.data,form.branchcode.data,form.country.data,form.phone.data,form.facility.data)   # Create new user
             # db.session.add(newuser) # Add new user to DB
             # db.session.commit()     # Save changes to DB 
-
             session['reg_form'] = form.data
-            print(session['reg_form'])
             return redirect(url_for('otp',param='register'))
     elif request.method == 'GET':
         if 'username' in session:
-            return redirect(url_for('success'))
+            return redirect(url_for('success',param='username'))
         form = SignupForm()    
         return render_template('register.html',form=form)
+
+@app.route("/pancard",methods=['GET','POST'])
+def pancard():
+    if request.method == 'POST':
+        form = PancardForm(request.form)
+        form.username.data = session['username']
+        if form.validate()==False:
+            return render_template('pancard.html',form=form)
+        else:
+            session['pan_card'] = form.data
+            return redirect(url_for('panenter'))
+    elif request.method == 'GET':
+        if 'pan_form' in session:
+            return redirect(url_for('success',param='pancard'))
+        form = PancardForm()
+        return render_template('pancard.html',form=form)
+
+@app.route("/panenter",methods=['GET','POST'])
+def panenter():
+    if request.method == 'POST':
+        form = EnterPanForm(request.form) 
+        if form.validate() == False:
+            return render_template('panenter.html',form=form)
+        else:
+            session['pan_form'] = form.data
+            return redirect(url_for('confirmpan'))
+    elif request.method == 'GET':
+        if 'pan_card' not in session:
+            return redirect(url_for('pancard'))
+        if 'pan_form' in session:
+            return redirect(url_for('success',param='pancard'))
+        form = EnterPanForm()    
+        return render_template('panenter.html',form=form)
+
+@app.route("/confirmpan",methods=['GET','POST'])
+def confirmpan():
+    if request.method == 'POST':
+        newrequest = RequestPancard(session['username'],session['pan_form']['pan'])   # Create new user
+        db.session.add(newrequest) # Add new user to DB
+        db.session.commit()     # Save changes to DB
+        return redirect(url_for('success',param='pancard'))
+    elif request.method == 'GET': 
+        if 'pan_card' not in session:
+            return redirect(url_for('pancard')) 
+        username = session['username']
+        user = Registration.query.filter_by(username=username).first()
+        cifno = user.cif_number
+        return render_template('confirmpan.html',details=[username,cifno])
 
 if __name__ == "__main__":    
     app.run(debug=True) 
