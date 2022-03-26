@@ -2,6 +2,7 @@ from flask_wtf import Form,RecaptchaField
 from wtforms import StringField,SubmitField,SelectField,RadioField,BooleanField,PasswordField
 from wtforms.validators import DataRequired,InputRequired,Length,EqualTo,ValidationError
 from models import Credentials,Registration
+from getOTP import sendOTP
 
 def DataNotExists(param):
         def _DataNotExists(form,field):
@@ -28,9 +29,18 @@ class SignupForm(Form):
     # recaptcha = RecaptchaField('recaptcha')
     submit = SubmitField('Register')
 
+def ValidOTP():
+    def _ValidOTP(form,field):
+        subotp = form['otp'].data
+        print(subotp)
+        smsotp = str(sendOTP())
+        print(smsotp)
+        if smsotp!= subotp:
+            raise ValidationError("Wrong OTP")
+    return _ValidOTP
 
 class OTPForm(Form):
-    otp = PasswordField('Enter the one time password(OTP)',validators=[DataRequired()])
+    otp = PasswordField('Enter the one time password(OTP)',validators=[DataRequired(),ValidOTP()])
     submit = SubmitField('Confirm')
     resend = SubmitField('Click here to resend the OTP')
 
@@ -53,6 +63,7 @@ def ValidPassword(other):
         if user is not None and not user.check_password(field.data):
             raise ValidationError("Wrong Password")
     return _ValidPassword
+
 
 class PancardForm(Form):
     username = StringField()
