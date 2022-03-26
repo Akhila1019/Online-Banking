@@ -1,6 +1,13 @@
 {% extends "layout.html" %}
 {% block content %}
-
+{% for field, errors in form.errors.items() %}
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          {{ ', '.join(errors) }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      {% endfor %}
       <div class="card" style="background-color: rgb(240, 234, 227);width: 100%;height: auto;">
         <div class="card-header" style="height:5rem; background-color: rgb(212, 184, 111);">
             <h3 style="color: black;">Enter the one time password sent to your mobile number.</h3>
