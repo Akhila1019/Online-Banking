@@ -2,6 +2,7 @@
 from flask import Flask, redirect,render_template,request, url_for,session
 from models import Registration, db,Credentials,RequestPancard
 from forms import SignupForm,OTPForm,ATMForm,UserForm,PancardForm,EnterPanForm
+from getOTP import returnOTP
 
 # Create instance from Flask class
 app = Flask(__name__)
@@ -90,6 +91,7 @@ def otp(param):
         elif 'username' in session:
             return redirect(url_for('success',param='username'))
         form = OTPForm()
+        returnOTP()
         return render_template("otp.html",form=form,param=param)
     elif request.method == 'POST':
         form = OTPForm(request.form) 
@@ -101,6 +103,7 @@ def otp(param):
             # db.session.commit()     # Save changes to DB
 
             # session['email'] = newuser.email
+            session['otp_form'] = form.data
             if param == 'register':
                 return redirect(url_for('atm'))
             elif param == 'pancard':
@@ -171,6 +174,22 @@ def confirmpan():
         user = Registration.query.filter_by(username=username).first()
         cifno = user.cif_number
         return render_template('confirmpan.html',details=[username,cifno])
+
+# @app.route('/sms', methods=['POST'])
+# def sms():
+#     reg_form = session['reg_form']
+#     number = reg_form['phone']
+#     otp = randint(1000,9999)
+#     account_sid = "AC390d3a533486540545dc51945f754305"
+#     auth_token = "904b88c315e940f745b23585b3de8035"
+
+#     client = Client(account_sid,auth_token)
+
+#     msg = client.messages.create(
+#         body = f"Your OTP is {otp}",
+#         from_ = "+15156047488",
+#         to = "+91"+str(number)
+#     )
 
 if __name__ == "__main__":    
     app.run(debug=True) 
