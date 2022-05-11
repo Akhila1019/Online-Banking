@@ -1,5 +1,4 @@
-
-{% extends "panlayout.html" %}
+{% extends "layout.html" %}
 {% block content %}
             {% for field, errors in form.errors.items() %}
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -10,21 +9,26 @@
             </div>
             {% endfor %}
 
-    
-            <span class="req" style="margin-left: 3px;">*</span>Required</br></br>
-            <form id="myForm6" method="POST" action="/panenter" class="Form" novalidate>
+            <div class="card-header" style="height:4rem; background-color: rgb(212, 184, 111);">
+              <h3 style="color: black;">Add GST Number</h3>
+            </div>
+
+            <div style="font-size: medium;">
+            </br>
+            <span class="req" style="margin-left: 20px;">*</span>Required
+          </div>
+            <form id="myForm17" method="POST" action="/entergst" class="Form" novalidate style="font-size: large;">
               {{ form.hidden_tag }}
-                  <p class="col-3" style="color: blue;">Your Account number </p> <div style="margin-top: -40px;"><strong style="margin-left: 240px;">{{ details[0] }}</b></div></br>
-                  <p class="col-3" style="color: blue;">Your CIF number </p>  <div style="margin-top: -40px;"><strong style="margin-left: 240px;">{{ details[1] }}</b></div></br>
+                  
                 <div class="form-row">
                   {{ form.pan.label(class="col-3",style="color: blue;")}}
-                  <span class="req" style="margin-left: -335px;margin-right: 180px;">*</span>
+                  <span class="req" style="margin-left: -325px;margin-right: 180px;">*</span>
                   {{ form.pan(class="col-2") }}
                 </div></br>
                 <div class="form-row">
-                    {{ form.repan.label(class="col-3",style="color: blue;")}}
-                    <span class="req" style="margin-left: -255px;margin-right: 100px;">*</span>
-                    {{ form.repan(class="col-2") }}
+                    {{ form.gst.label(class="col-3",style="color: blue;")}}
+                    <span class="req" style="margin-left: -246px;margin-right: 100px;">*</span>
+                    {{ form.gst(class="col-2") }}
                 </div></br></br>
                 <div style="margin-left: 500px;">
                   {{ form.submit(class="btn btn-primary mr-3 mb-2 col-1") }}

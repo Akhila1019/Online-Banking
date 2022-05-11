@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<main class="container">
+    {% for field, errors in form.errors.items() %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ ', '.join(errors) }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+        <div class="section-content">
+          <div class="card-header" style="height:4rem; background-color: rgb(212, 184, 111);">
+            <h3 style="color: black;">Stop Payment on Cheque</h3>
+          </div>
+          <div style="font-size: medium;">
+            </br>
+            <span class="req" style="margin-left: 20px;">*</span>Required
+          </div>
+          <div class="card-body" style="font-size: large;" >
+            <form id="myForm1" method="POST" action="/stopcheque" novalidate>
+              {{ form.hidden_tag }}
+              <div class="form-row">
+                {{ form.acctype.label(class="col-2",style="color: blue;")}}
+                <span class="req" style="margin-left: -90px;margin-right: 85px;">*</span>
+                {{ form.acctype(style="width: 375px;")}}
+              </div></br></br>
+              <div class="form-row">
+                {{ form.SCheqNum.label(class="col-2",style="color: blue;")}}
+                <span class="req" style="margin-left: -20px;margin-right: 13px;">*</span>
+                {{ form.SCheqNum(style="width: 375px;")}}
+              </div></br></br>
+              <div class="form-row">
+                {{ form.ECheqNum.label(class="col-2",style="color: blue;")}}
+                <span class="req" style="margin-left: -28px;margin-right: 19px;">*</span>
+                {{ form.ECheqNum(style="width: 375px;") }}
+              </div></br></br>
+              <div class="form-row">
+                {{ form.Reason.label(class="col-2",style="color: blue;")}}
+                <span class="req" style="margin-left: -140px;margin-right: 132px;">*</span>
+                {{ form.Reason(style="width: 375px;") }}
+              </div></br></br>
+              <div style="text-align: center;">
+                {{ form.submit(class="btn btn-primary") }}
+              </div></br></br>
+              <div style="text-align: center;">
+                {{ form.cancel(class="btn btn-primary") }}
+              
+              </div>
+              </form>
+          </div>
+        </div>    
+    </main>
+
+{% endblock %}

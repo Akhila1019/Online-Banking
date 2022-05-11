@@ -2,8 +2,7 @@
 {% block content %}
 
 <main class="container">
-  {# <!-- <div class="card" style="background-color: rgb(240, 234, 227);width: 100%;height: auto;"> --> #}
-    {% for field, errors in form.errors.items() %}
+  {% for field, errors in form.errors.items() %}
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
         {{ ', '.join(errors) }}
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -16,7 +15,7 @@
             <h3 style="color: black;">User Registration</h3>
           </div>
           <div style="font-size: medium;">
-            <br>
+            </br>
             <span class="req" style="margin-left: 20px;">*</span>Required
           </div>
           <div class="card-body" style="font-size: large;" >
@@ -52,16 +51,7 @@
                 <span class="req" style="margin-left: -76px;margin-right: 60px;">*</span>
                 {{ form.facility(style="width: 375px;")}}
               </div></br></br>
-              {#  <!-- <div class="form-row">
-                {{ form.recaptcha(style="width: 375px;") }}
-              </div></br></br> --> #}
-              <script src="static/js/intlTelInput.js"></script>
-              <script>
-              var input = document.querySelector("#phone");
-              intlTelInput(input, {
-                  utilsScript: "static/js/utils.js"
-              });
-              </script>
+              
               <div style="text-align: center;">
                 {{ form.submit(class="btn btn-primary") }}
               </div>

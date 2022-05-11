@@ -10,6 +10,7 @@
             </button>
         </div>
     {% endfor %}
+
     <div class="card-header" style="height:5rem; background-color: rgb(212, 184, 111);">
             <script src="static/js/reset.js"></script>
             <script src="static/js/confirm_pwd.js"></script>
@@ -26,7 +27,7 @@
                         <span class="req" style="margin-left: -138px;margin-right: 148px;">*</span>
                     {{ form.username }}
                 </div>
-                <br><br>
+                </br></br>
                 <div class="form-row">
                     {{ form.password.label(style="color: blue;",class="col-3") }}
                         <span class="req" style="margin-left: -92px;margin-right: 102px;">*</span>
@@ -43,9 +44,13 @@
                 <span class="req" style="margin-left: -5px;margin-right: 22px;">*</span>
                 
                 </br>
+                </br>
+                <a href={{ url_for('tos') }}>Click here to read the terms and conditions</a>
+                </br>
                 <div style="margin-left: 500px;">
                     {{ form.submit(class="btn btn-primary mr-3 mb-2 col-2") }}
                     <button type="button" class="form-group btn btn-primary mr-3 mb-2 col-2" onclick="resetForm('myForm5')">Reset</button>
+                    
                 </div>
                 <div class="card w-100 h-100">
                     <div class="card-body" style="background-color: rgb(228, 197, 186);color: black;">

@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block content %}
+{% for field, errors in form.errors.items() %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ ', '.join(errors) }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+        <div class="div1">
+            <div class="card-header" style="height:4rem; background-color: rgb(212, 184, 111);">
+                <h3 style="color: black;">Change Password</h3>
+              </div>
+            <div style="font-size: medium;">
+                </br>
+                <span class="req" style="margin-left: 20px;">*</span><p style="color: black;margin-top: -25px;margin-left: 30px;">Required</p>
+            </div>
+            <div class="card-body" style="font-size: large;" >
+            <form name="form1" action="/change_pwd" method="POST" novalidate>
+                {{ form.hidden_tag }}
+                <div class="form-row">
+                    {{ form.username.label(class="col-2",style="color: blue;")}}
+                    <span class="req" style="margin-left: -162px;margin-right: 158px;">*</span>
+                    {{ form.username(style="width: 375px;")}}
+                </div></br></br>
+                <div class="form-row">
+                    {{ form.old.label(class="col-2",style="color: blue;")}}
+                    <span class="req" style="margin-left: -132px;margin-right: 130px;">*</span>
+                    {{ form.old(style="width: 375px;")}}
+                </div></br></br>
+                <div class="form-row">
+                    {{ form.new1.label(class="col-2",style="color: blue;")}}
+                    <span class="req" style="margin-left: -125px;margin-right: 125px;">*</span>
+                    {{ form.new1(style="width: 375px;")}}
+                </div></br></br>
+                <div class="form-row">
+                    {{ form.new2.label(class="col-2",style="color: blue;")}}
+                    <span class="req" style="margin-left: -60px;margin-right: 60px;">*</span>
+                    {{ form.new2(style="width: 375px;")}}
+                </div>
+                </br></br>
+                <div style="text-align: center;">
+                    {{ form.submit(class="btn btn-primary") }}
+                </div>
+            </form>
+            </div>
+            <br />
+        </div>
+{% endblock %}

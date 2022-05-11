@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block content %}
+<main class="container">
+{% for field, errors in form.errors.items() %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ ', '.join(errors) }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+{% endfor %}
+<div class="section-content">
+    <div class="card-header" style="height:4rem; background-color: rgb(212, 184, 111);margin-bottom: 10px;">
+        <h3 style="color: black;">Request Cheque</h3>
+      </div>
+      <div style="font-size: medium;">
+    </br>
+    <span class="req" style="margin-left: 20px;">*</span>Required
+  </div>
+      <div class="card-body" style="font-size: large;" >
+    <form name="form10" action="/cheque" method="POST" novalidate>
+        {{ form.hidden_tag }}
+        <div class="form-row" style="font-size: large;">
+            {{ form.ac.label(class="col-4",style="color: blue;")}}
+            <span class="req" style="margin-left: -362px;margin-right: 300px;">*</span>
+            {{ form.ac(style="width: 375px;")}}
+        </div></br></br>
+        <div class="form-row" style="font-size: large;">
+            {{ form.thr.label(class="col-4",style="color: blue;")}}
+            <span class="req" style="margin-left: -150px;margin-right: 90px;">*</span>
+            {{ form.thr(style="width: 375px;")}}
+        </div></br></br>
+        <div class="form-row" style="font-size: large;">
+            {{ form.ncheq.label(class="col-4",style="color: blue;")}}
+            <span class="req" style="margin-left: -285px;margin-right: 220px;">*</span>
+            {{ form.ncheq(style="width: 100px;") }}
+        </div></br></br>
+        <div class="form-row" style="font-size: large;">
+            {{ form.nleaf.label(class="col-4",style="color: blue;")}}
+            <span class="req" style="margin-left: -282px;margin-right: 220px;">*</span>
+            {{ form.nleaf(style="width: 100px;")}}
+        </div></br></br>
+        </br></br>
+            {{ form.submit(class="btn btn-primary") }}
+        </form>
+    </div>
+    </div>
+</main>
+{% endblock %}

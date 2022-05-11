@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<main class="container">
+ {% for field, errors in form.errors.items() %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ ', '.join(errors) }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+        <div class="section-content">
+          <div class="card-header" style="height:4rem; background-color: rgb(212, 184, 111);">
+            <h3 style="color: black;">Forgot password</h3>
+          </div>
+          <div style="font-size: medium;">
+            </br>
+            <span class="req" style="margin-left: 20px;">*</span><p style="color: black;margin-top: -25px;margin-left: 30px;">Required</p>
+          </div>
+          <div class="card-body" style="font-size: large;" >
+            <form id="form1" method="POST" action="/forgot_pwd" novalidate>
+              {{ form.hidden_tag }}
+              <div class="form-row">
+                {{ form.accno.label(class="col-2",style="color: blue;")}}
+                <span class="req" style="margin-left: -130px;margin-right: 85px;padding-left: 50px;">*</span>
+                {{ form.accno(style="width: 375px;")}}
+              </div></br></br>
+              <div class="form-row">
+                {{ form.phone.label(class="col-2",style="color: blue;")}}
+                <span class="req" style="margin-left:-145px;margin-right: 100px;padding-left: 50px;">*</span>
+                {{ form.phone(style="width: 375px;")}}
+              </div></br></br>
+              
+            
+              <div style="text-align: center;">
+                {{ form.submit(class="btn btn-primary") }}
+              </div>
+          </div>
+        </div>    
+    </main>
+
+{% endblock %}

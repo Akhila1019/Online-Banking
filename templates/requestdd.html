@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<main class="container1">
+   {% for field, errors in form.errors.items() %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ ', '.join(errors) }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+    <div class="section-content1">
+        <div class="card-header1" style="height:4rem; background-color: rgb(212, 184, 111);">
+          <h3 style="color: black;">Request Demand Draft</h3>
+        </div>
+        <div style="font-size: medium;">
+          </br>
+          <span class="req" style="margin-left: 20px;">*</span>Required
+        </div>
+        <div class="card-body" style="font-size: large;" >
+          <form id="form1" method="POST" action="/ddreq" novalidate>
+            {{ form.hidden_tag }}
+            <div class="form-row1">
+              {{ form.ano.label(class="col-2",style="color: blue;")}}
+              <span class="req" style="margin-left: -105px;margin-right: 60px;">*</span>
+              {{ form.ano(style="width: 375px;margin-left: 75px;")}}
+            </div></br></br>
+            <div class="form-row1">
+              {{ form.bname.label(class="col-2",style="color: blue;")}}
+              <span class="req" style="margin-left: -105px;margin-right: 100px;">*</span>
+              {{ form.bname(style="width: 375px;margin-left: 35px;")}}
+            </div></br></br>
+            <div class="form-row1">
+                {{ form.amou.label(class="col-2",style="color: blue;")}}
+                <span class="req" style="margin-left: -150px;margin-right: 100px;">*</span>
+                {{ form.amou(style="width: 375px;margin-left:80px;")}}
+              </div></br></br>
+              <div class="form-row1">
+                {{ form.place.label(class="col-2",style="color: blue;")}}
+                <span class="req" style="margin-left: -80px;margin-right: 100px;">*</span>
+                {{ form.place(style="width: 375px;margin-left: 10px;")}}
+              </div></br></br>
+           
+          
+            <div style="text-align: center;">
+              {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </div>
+      </div>    
+  </main>
+
+{% endblock %}

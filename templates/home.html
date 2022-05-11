@@ -1,0 +1,123 @@
+{% extends "layout.html" %}
+{% block content %}
+<main class="container">
+  
+ {% for field, errors in form.errors.items() %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ ', '.join(errors) }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" >
+                <span>{{ message }}</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">×</span>
+                </button>
+                {% if session.pop('_flashes', None) %}
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% endif %}
+  {% endwith %}
+    <div class="card-header" style="height:4rem; background-color: rgb(111, 200, 212);">
+      <h3 style="color: black;text-align: center;">Welcome to Online Banking Portal</h3>
+    </div>
+    <section class="main">
+        
+      <div>
+          
+          <div class="toggle">
+              <em class="fas fa-bars"></em>
+          </div>
+          
+          <nav aria-label='navbar' >
+              <ul>
+                 
+                 <li>
+                    <a href="#">About Us</a>
+                  
+                 </li>
+                 
+                 <li><a href="#">Contact Us</a></li>
+                 <li><a href="#">Feedback</a></li>
+              </ul>
+           </nav>
+      </div>
+     
+  </section>
+   <br>
+        <div class="section-content">
+       
+          
+         
+        <br> <br>
+       <div class="toggle">
+        <em class="fas fa-bars"></em>
+    </div>
+
+    <div style="width: 100%;">
+      <div style="width: 50%; height: 100px; float: left; ">
+          <h3>User Service Request</h3>
+          <nav aria-label='navbar' >
+            <ul style="width:40%">         
+              <li>
+                <a href="{{ url_for('pancard') }}">Add PAN card</a>
+              </li>
+            </ul>
+          </nav>
+          <nav aria-label='navbar' >
+            <ul style="width:40%">         
+              <li><a href="{{ url_for('ddreq') }}">Request DD</a></li>
+            </ul>
+        </nav>   
+        <nav aria-label='navbar' >
+          <ul style="width:40%">         
+            <li><a href="{{ url_for('stopcheque') }}">Stop payment on cheque</a></li>
+          </ul>
+        </nav>   
+
+        <nav aria-label='navbar' >
+          <ul style="width:40%">         
+              <li><a href="{{ url_for('cheque') }}">Request cheque</a></li>
+          </ul>
+        </nav>   
+      </div>
+      <div style="margin-left: 50%; height: 100px; ">
+        <h3>User Enquiry</h3>
+        <nav aria-label='navbar' >
+          <ul style="width:45%">         
+            <li><a href="#">View Account Balance</a></li>
+          </ul>
+        </nav>
+        <nav aria-label='navbar' >
+          <ul style="width:45%">         
+            <li><a href="#">View Cheque Status</a></li>
+          </ul>
+      </nav>   
+    
+
+      <nav aria-label='navbar' >
+        <ul style="width:45%">         
+          <li><a href="{{ url_for('acc') }}">View last 5 years account statements</a></li>
+        </ul>
+      </nav>   
+
+      <nav aria-label='navbar' >
+        <ul style="width:45%">         
+            <li><a href="#">View Fixed deposit summary</a></li>
+        </ul>
+      </nav>   
+      </div>
+    </div>
+    <form id="myForm16" method="POST" action="/home" novalidate>
+      {{ form.hidden_tag }}
+      <div style="text-align: center;">
+        {{ form.logout(class="btn btn-danger" ,style="margin-top:200px;margin-left:-280px;") }}
+      </div>  
+    </main>
+    {% endblock %}

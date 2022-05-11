@@ -14,12 +14,12 @@
               {{ form.hidden_tag }}
                 <div class="form-row">
                   {{ form.password.label(class="col-3",style="color: blue;")}}
-                  <span class="req" style="margin-left: -230px;margin-right: 100px;">*</span>
+                  <span class="req" style="margin-left: -235px;margin-right: 100px;">*</span>
                   {{ form.password(class="col-2") }}
                 </div></br></br>
                 <div>
-                  <a href="forgotpwd.html">Forgot password?</a><br><br>
-                  <p>To reset password.  <a href="resetpwd.html">Click here</a></p>
+                  <p>Forgot password?  <a href="{{ url_for('forgot_pwd') }}">Click Here</a></span></p><br>
+                  <p>To reset password.  <a href="{{ url_for('change_pwd') }}">Click Here</a></span></p>
                 </div>
                 <div style="margin-left: 500px;">
                   {{ form.submit(class="btn btn-primary mr-3 mb-2 col-1") }}

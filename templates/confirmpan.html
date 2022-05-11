@@ -1,14 +1,13 @@
 {% extends "panlayout.html" %}
-
-{% block content %}
+{% block content%}
 <form method="POST" action="/confirmpan">
     <div class="form-row">
         <p class="col-3" style="color: blue;">Name </p>  
-        <div style="margin-top: -40px;"><b style="margin-left: 240px;">{{ details[0] }}</b></div><br>
+        <div style="margin-top: -40px;"><strong style="margin-left: 240px;">{{ details[0] }}</b></div></br>
         <p class="col-3" style="color: blue;">CIF number </p>  
-        <div style="margin-top: -40px;"><b style="margin-left: 240px;">{{ details[1] }}</b></div><br>
+        <div style="margin-top: -40px;"><strong style="margin-left: 240px;">{{ details[1] }}</b></div></br>
         <p class="col-3" style="color: blue;">PAN number </p>  
-        <div style="margin-top: -40px;"><b style="margin-left: 240px;">{{ session['pan_form']['pan'] }}</b></div><br>
+        <div style="margin-top: -40px;"><strong style="margin-left: 255px;">{{ session['pan_enter_form']['pan'] }}</b></div></br>
     </div></br>
     <button type="submit" class="btn btn-primary">Confirm</button>
 </form>
