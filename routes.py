@@ -38,7 +38,9 @@ vac = 'view_ac_bal.html'
 ac5 = 'ac5years.html' 
 ymd = "'%Y-%m-%d'"
 
+flag = 0
 def checkparam1(param):
+    flag = 1
     if param == 'username':
         if 'reg_form' not in session:
             return redirect(url_for('register'))
@@ -47,6 +49,7 @@ def checkparam1(param):
         return render_template(success_page,msg="Successfully registered for Internet Banking :)")
 
 def checkparam2(param):
+    flag = 2
     if param == 'pancard':
         if 'pan_card_form' not in session:
             return redirect(url_for('pancard'))
@@ -96,14 +99,16 @@ def home():
 @app.route("/success<param>")
 def success(param):
     checkparam1(param)
-    checkparam2(param)
-    msg = checkparam3(param)
-    if param == 'newpwd'and 'forgot_form' not in session:
-            return redirect(url_for('forgot_pwd'))
-    elif param == 'newpwd'and 'forgot_form' in session:
-        msg = "Password updated successfully."
+    if(flag==0):
+        checkparam2(param)
+    if(flag==0 and flag!=2):
+        msg = checkparam3(param)
+        if param == 'newpwd'and 'forgot_form' not in session:
+                return redirect(url_for('forgot_pwd'))
+        elif param == 'newpwd'and 'forgot_form' in session:
+            msg = "Password updated successfully."
 
-    return render_template(success_page,msg=msg)
+        return render_template(success_page,msg=msg)
 
 @app.route("/username",methods=['GET','POST'])
 def username():
