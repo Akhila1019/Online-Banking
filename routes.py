@@ -22,7 +22,7 @@ if ENV == 'dev':
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:dbpassword@localhost:5432/Online-Banking'
 else:
     app.debug = False
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://ooiymqfeiassio:70522e6829fe4c18cf8db346f2599ba5f9aef7e8e12eb87be78a44606710fe93@ec2-54-164-40-66.compute-1.amazonaws.com:5432/d7r3h476bmi0rf'
+    app.config['DATABASE_URL'] = 'postgres://ooiymqfeiassio:70522e6829fe4c18cf8db346f2599ba5f9aef7e8e12eb87be78a44606710fe93@ec2-54-164-40-66.compute-1.amazonaws.com:5432/d7r3h476bmi0rf'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
