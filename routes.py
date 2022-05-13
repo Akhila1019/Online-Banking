@@ -57,6 +57,7 @@ def checkparam2(param):
         return redirect(url_for('newpwd'))
 
 def checkparam3(param):
+    msg = ''
     if param == 'change_pwd':
         msg = "Password changed successfully."
     elif param == 'ddreq':
