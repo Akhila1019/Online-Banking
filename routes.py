@@ -25,6 +25,7 @@ else:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://ooiymqfeiassio:70522e6829fe4c18cf8db346f2599ba5f9aef7e8e12eb87be78a44606710fe93@ec2-54-164-40-66.compute-1.amazonaws.com:5432/d7r3h476bmi0rf'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 db.init_app(app)
 
 # To create secure forms
