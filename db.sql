@@ -1,11 +1,9 @@
-
 CREATE TABLE credentials(
 username VARCHAR(25) PRIMARY KEY,
 pwdhash VARCHAR(250) not null
 );
 
-SELECT * FROM credentials;
-
+-- SELECT * FROM credentials;
 -- DROP TABLE credentials;
 -- DELETE FROM credentials;
 
@@ -19,8 +17,7 @@ phone  BIGINT not null,
 facility VARCHAR(100) not null
 );
 
-SELECT * FROM users;
-
+--SELECT * FROM users;
 -- DROP TABLE users;
 -- DELETE FROM users;
 
@@ -30,8 +27,8 @@ pan_number VARCHAR(50) not null unique,
 status VARCHAR(15)
 );
 
-SELECT * FROM panrequest;
-DROP TABLE panrequest;
+-- SELECT * FROM panrequest;
+-- DROP TABLE panrequest;
 
 CREATE TABLE cheque(
 ac VARCHAR(15) PRIMARY KEY,
@@ -47,8 +44,8 @@ INSERT INTO cheque VALUES('1234567910','20',2,1,123456,'Not used');
 INSERT INTO cheque VALUES('1234567911','20',2,1,1234567,'Used');
 INSERT INTO cheque VALUES('1234567912','20',2,1,12345678,'Used');
 
-SELECT * FROM cheque;
-DROP TABLE cheque;
+-- SELECT * FROM cheque;
+-- DROP TABLE cheque;
 
 CREATE TABLE account(
 account_number VARCHAR(50) not null,
@@ -73,4 +70,4 @@ INSERT INTO account VALUES('1234987600','2020-09-13','qwert','1234567920',2000,1
 INSERT INTO account VALUES('1234987600','2020-09-13','qwert','1234567921',2000,10000,8000);
 SELECT * FROM account;
 
-DROP TABLE account;
+-- DROP TABLE account;
