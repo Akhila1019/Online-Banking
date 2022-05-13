@@ -2,7 +2,7 @@ from flask_wtf import Form,RecaptchaField
 from wtforms import StringField,SubmitField,SelectField,RadioField,BooleanField,PasswordField,DateField
 from wtforms.validators import DataRequired,InputRequired,Length,EqualTo,ValidationError
 from models import Credentials,Registration,RequestPancard
-from getOTP import send_otp
+from getOTP import *
 from werkzeug.security import generate_password_hash,check_password_hash
 
 
