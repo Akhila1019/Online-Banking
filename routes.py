@@ -11,7 +11,7 @@ import datetime
 import psycopg2
 import secrets
 import string
-
+from flask_sqlalchemy import SQLAlchemy
 
 # Create instance from Flask class
 app = Flask(__name__)
@@ -26,7 +26,8 @@ else:
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db.init_app(app)
+# db.init_app(app)
+db = SQLAlchemy(app)
 
 # To create secure forms
 app.secret_key = "development-key"
