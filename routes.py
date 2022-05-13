@@ -12,7 +12,6 @@ import psycopg2
 import secrets
 import string
 
-port = int(os.environ.get('PORT', 5000))
 
 # Create instance from Flask class
 app = Flask(__name__)
@@ -483,4 +482,4 @@ def curprev():
         else:
             return render_template(prevcur,form=form)
 if __name__ == "__main__": 
-    app.run(host='0.0.0.0', port=port, debug=True) 
+    app.run(debug=True) 
