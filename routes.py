@@ -5,7 +5,7 @@ from flask import Flask, Response,redirect,render_template,request,url_for,sessi
 from models import Account, Registration, db,Credentials,RequestPancard,cheq
 from forms import ChangePwdForm,ChequeForm,ForgotForm,NewpwdForm,RequestForm,StopchequeForm,PancardForm,EnterGstForm
 from forms import HomeForm,ACForm,StatusForm,ViewAcBalForm,UserForm,ATMForm,OTPForm,SignupForm,EnterPanForm,LoginForm,AmountMonthForm
-from getOTP import return_otp
+from getOTP import *
 from werkzeug.security import generate_password_hash
 import datetime
 import psycopg2
