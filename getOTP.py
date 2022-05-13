@@ -1,14 +1,17 @@
-from random import randint
-from flask import session
 from twilio.rest import Client
+import string
+import secrets
+alphabet = string.ascii_letters + string.digits
+password = ''.join(secrets.choice(alphabet) for i in range(8))
 
-otp = randint(100000,999999)
 
-def returnOTP():
-    reg_form = session['reg_form']
+otp = password
+
+def return_otp(form):
+    reg_form = form
     number = reg_form['phone']
     account_sid = "AC390d3a533486540545dc51945f754305"
-    auth_token = "904b88c315e940f745b23585b3de8035"
+    auth_token = "b89bf8ed98fd5ede788f946b57f2a983"
 
     client = Client(account_sid,auth_token)
 
@@ -17,7 +20,8 @@ def returnOTP():
         from_ = "+15156047488",
         to = "+91"+str(number)
     )
+    print(msg)
 
-def sendOTP():
+def send_otp():
     return otp
 
