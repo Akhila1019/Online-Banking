@@ -354,7 +354,7 @@ def newpwd():
         if form.validate() == False:
             return render_template('newpwd.html',form=form)
         else:
-            acc = Registration.query.filter_by(account_number=request.form['accno']).first()
+            acc = Registration.query.filter_by(account_number=session['accno']).first()
             username = acc.username
             user = Credentials.query.filter_by(username=username).first()
             user.pwdhash = generate_password_hash(request.form['pwd'])
