@@ -1,123 +1,112 @@
 {% extends "layout.html" %}
 {% block content %}
 <main class="container">
-  
- {% for field, errors in form.errors.items() %}
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        {{ ', '.join(errors) }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    {% endfor %}
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        {% for category, message in messages %}
-            <div class="alert alert-danger alert-dismissible fade show" role="alert" >
-                <span>{{ message }}</span>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span>
-                </button>
-                {% if session.pop('_flashes', None) %}
-                {% endif %}
-            </div>
-        {% endfor %}
+
+  {% for field, errors in form.errors.items() %}
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ ', '.join(errors) }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  {% for category, message in messages %}
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <span>{{ message }}</span>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">×</span>
+    </button>
+    {% if session.pop('_flashes', None) %}
     {% endif %}
+  </div>
+  {% endfor %}
+  {% endif %}
   {% endwith %}
-    <div class="card-header" style="height:4rem; background-color: rgb(111, 200, 212);">
-      <h3 style="color: black;text-align: center;">Welcome to Online Banking Portal</h3>
-    </div>
-    <section class="main">
-        
-      <div>
-          
-          <div class="toggle">
-              <em class="fas fa-bars"></em>
-          </div>
-          
-          <nav aria-label='navbar' >
-              <ul>
-                 
-                 <li>
-                    <a href="#">About Us</a>
-                  
-                 </li>
-                 
-                 <li><a href="#">Contact Us</a></li>
-                 <li><a href="#">Feedback</a></li>
-              </ul>
-           </nav>
-      </div>
-     
-  </section>
-   <br>
-        <div class="section-content">
-       
-          
-         
-        <br> <br>
-       <div class="toggle">
+  <div class="card-header" style="height:4rem; background-color: rgb(111, 200, 212);">
+    <h3 style="color: black;text-align: center;">Welcome to Online Banking Portal</h3>
+  </div>
+  <section class="main">
+
+    <div>
+      <div class="toggle">
         <em class="fas fa-bars"></em>
-    </div>
-
-    <div style="width: 100%;">
-      <div style="width: 50%; height: 100px; float: left; ">
-          <h3>User Service Request</h3>
-          <nav aria-label='navbar' >
-            <ul style="width:40%">         
-              <li>
-                <a href="{{ url_for('pancard') }}">Add PAN card</a>
-              </li>
-            </ul>
-          </nav>
-          <nav aria-label='navbar' >
-            <ul style="width:40%">         
-              <li><a href="{{ url_for('ddreq') }}">Request DD</a></li>
-            </ul>
-        </nav>   
-        <nav aria-label='navbar' >
-          <ul style="width:40%">         
-            <li><a href="{{ url_for('stopcheque') }}">Stop payment on cheque</a></li>
-          </ul>
-        </nav>   
-
-        <nav aria-label='navbar' >
-          <ul style="width:40%">         
-              <li><a href="{{ url_for('cheque') }}">Request cheque</a></li>
-          </ul>
-        </nav>   
       </div>
-      <div style="margin-left: 50%; height: 100px; ">
-        <h3>User Enquiry</h3>
-        <nav aria-label='navbar' >
-          <ul style="width:45%">         
-            <li><a href="#">View Account Balance</a></li>
+      <nav aria-label='navbar'>
+        <ul>
+          <li><form id="myForm16" method="POST" action="/home" novalidate>
+            <button type="submit" data-bs-toggle="tooltip" data-bs-html="true" title="LogOut"><img src="static/img/Logout.png" style="width: 45px;">
+            </button>
+          </form></li>
+          
+          <li><a href="#">Feedback</a></li>
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#">About Us</a></li>
+          
+          <li class="dropdown-toggle" type="button" id="dropdownMenuButton1"
+            data-bs-toggle="dropdown" aria-expanded="false">User Service Request</li>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li style="float: left;"><a class="dropdown-item" href="{{ url_for('pancard') }}">Add PAN card</a></li><br>
+            <li style="float: left;"><a class="dropdown-item" href="{{ url_for('ddreq') }}">Request DD</a></li><br>
+            <li style="float: left;"><a class="dropdown-item" href="{{ url_for('stopcheque') }}">Stop payment on cheque</a></li><br>
+            <li style="float: left;"><a class="dropdown-item" href="{{ url_for('cheque') }}">Request cheque</a></li>
           </ul>
-        </nav>
-        <nav aria-label='navbar' >
-          <ul style="width:45%">         
-            <li><a href="#">View Cheque Status</a></li>
-          </ul>
-      </nav>   
-    
-
-      <nav aria-label='navbar' >
-        <ul style="width:45%">         
-          <li><a href="{{ url_for('acc') }}">View last 5 years account statements</a></li>
+          <li class="dropdown-toggle" type="button" id="dropdownMenuButton1"
+            data-bs-toggle="dropdown" aria-expanded="false">User Enquiry</li>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li style="float: left;"><a class="dropdown-item" href="{{ url_for('view') }}">View Cheque Status</a></li><br>
+            <li style="float: left;"><a class="dropdown-item" href="{{ url_for('acc') }}">View last 5 years account summary</a></li><br>
+            <li style="float: left;"><a class="dropdown-item" href="{{ url_for('curprev') }}">View current and last month account summary</a></li><br>
+            <li style="float: left;"><a class="dropdown-item" href="{{ url_for('accbal') }}">View Account Balance</a></li><br>
+            
+          </ul> 
         </ul>
-      </nav>   
-
-      <nav aria-label='navbar' >
-        <ul style="width:45%">         
-            <li><a href="#">View Fixed deposit summary</a></li>
-        </ul>
-      </nav>   
-      </div>
+      </nav>
     </div>
-    <form id="myForm16" method="POST" action="/home" novalidate>
-      {{ form.hidden_tag }}
-      <div style="text-align: center;">
-        {{ form.logout(class="btn btn-danger" ,style="margin-top:200px;margin-left:-280px;") }}
-      </div>  
-    </main>
-    {% endblock %}
+  </section>
+  <br>
+
+
+  <div class="section-content">
+    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+      </div>
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img src="static/img/back1.png" class="d-block w-100" alt="...">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>First slide label</h5>
+            <p>Some representative placeholder content for the first slide.</p>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <img src="static/img/back.png" class="d-block w-100" alt="...">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>Second slide label</h5>
+            <p>Some representative placeholder content for the second slide.</p>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <img src="static/img/avatar.png" class="d-block w-100" alt="...">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>Third slide label</h5>
+            <p>Some representative placeholder content for the third slide.</p>
+          </div>
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+    </div>
+</main>
+{% endblock %}

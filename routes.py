@@ -16,7 +16,7 @@ from flask_sqlalchemy import SQLAlchemy
 # Create instance from Flask class
 app = Flask(__name__)
 
-ENV = 'prod'
+ENV = 'dev'
 if ENV == 'dev':
     app.debug = True
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:dbpassword@localhost:5432/Online-Banking'
@@ -26,11 +26,12 @@ else:
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# db.init_app(app)
-db = SQLAlchemy(app)
+db.init_app(app)
+# db = SQLAlchemy(app)
 
 # To create secure forms
 app.secret_key = "development-key"
+
 prevcur = 'prevcurrstatement.html'
 success_page = 'success.html'
 v = 'view.html'
@@ -38,9 +39,8 @@ vac = 'view_ac_bal.html'
 ac5 = 'ac5years.html' 
 ymd = "'%Y-%m-%d'"
 
-flag = 0
+
 def checkparam1(param):
-    flag = 1
     if param == 'username':
         if 'reg_form' not in session:
             return redirect(url_for('register'))
@@ -49,7 +49,6 @@ def checkparam1(param):
         return render_template(success_page,msg="Successfully registered for Internet Banking :)")
 
 def checkparam2(param):
-    flag = 2
     if param == 'pancard':
         if 'pan_card_form' not in session:
             return redirect(url_for('pancard'))
@@ -98,17 +97,19 @@ def home():
 
 @app.route("/success<param>")
 def success(param):
-    checkparam1(param)
-    if(flag==0):
-        checkparam2(param)
-    if(flag==0 and flag!=2):
-        msg = checkparam3(param)
+    if param == 'username':
+        return checkparam1(param)
+    elif param == 'pancard' or param =='forgot_pwd':
+        return checkparam2(param)
+    else:
         if param == 'newpwd'and 'forgot_form' not in session:
                 return redirect(url_for('forgot_pwd'))
         elif param == 'newpwd'and 'forgot_form' in session:
             msg = "Password updated successfully."
-
-        return render_template(success_page,msg=msg)
+            return render_template(success_page,msg=msg)
+        else:
+            msg = checkparam3(param)
+            return render_template(success_page,msg=msg)
 
 @app.route("/username",methods=['GET','POST'])
 def username():
@@ -356,7 +357,7 @@ def newpwd():
             acc = Registration.query.filter_by(account_number=session['accno']).first()
             username = acc.username
             user = Credentials.query.filter_by(username=username).first()
-            user.pwdhash = generate_password_hash(request.form['pwd'])
+            user.pwdhash = generate_password_hash(form['pwd'])
             db.session.commit()
             return redirect(url_for('success',param='newpwd')) 
 
