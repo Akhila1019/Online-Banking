@@ -26,8 +26,8 @@ else:
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# db.init_app(app)
-db = SQLAlchemy(app)
+db.init_app(app)
+# db = SQLAlchemy(app)
 
 # To create secure forms
 app.secret_key = "development-key"
@@ -84,7 +84,7 @@ def home():
         return redirect(url_for('login'))
     if request.method == 'GET':
         form = HomeForm()
-        return render_template('home1.html',form=form)
+        return render_template('home.html',form=form)
     elif request.method == 'POST':
         session.pop('login_form',None)
         session.pop('reg_form',None)
