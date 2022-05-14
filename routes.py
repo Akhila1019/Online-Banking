@@ -26,8 +26,8 @@ else:
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db.init_app(app)
-# db = SQLAlchemy(app)
+# db.init_app(app)
+db = SQLAlchemy(app)
 
 # To create secure forms
 app.secret_key = "development-key"
