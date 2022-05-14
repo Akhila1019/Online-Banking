@@ -357,7 +357,7 @@ def newpwd():
             acc = Registration.query.filter_by(account_number=session['accno']).first()
             username = acc.username
             user = Credentials.query.filter_by(username=username).first()
-            user.pwdhash = generate_password_hash(form['pwd'])
+            user.pwdhash = generate_password_hash(request.form['pwd'])
             db.session.commit()
             return redirect(url_for('success',param='newpwd')) 
 
