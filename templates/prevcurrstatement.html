@@ -1,44 +1,39 @@
 {% extends "layout.html" %}
 {% block content %}
-            {% for field, errors in form.errors.items() %}
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ ', '.join(errors) }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            {% endfor %}
-            
-            <div class="card-header" style="height:4rem; background-color: rgb(212, 184, 111);">
-              <h3 style="color: black;">View Previous and Current month details</h3>
-            </div>
-            <div style="font-size: medium;">
-              <br>
-              <span class="req" style="margin-left: 20px;">*</span><p style="color: black;margin-top: -25px;margin-left: 30px;">Required</p>
-            </div>
-            <div class="card-body" style="font-size: large;" >
+
+<main class="container">
+  {% for field, errors in form.errors.items() %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ ', '.join(errors) }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+        <div class="section-content">
+          <div class="card-header" style="height:4rem; background-color: rgb(212, 184, 111);">
+            <h3 style="color: black;">View current and previous years Account details</h3>
+          </div>
+
+          <div class="card-body" style="font-size: large;" >
             <form id="myForm6" class="Form" method="post" action="/curprev" novalidate>
               
               {{ form.hidden_tag }}
                   <div class="form-row">
                   {{ form.acctype.label(class="col-3",style="color: blue;")}}
-                  <span class="req" style="margin-left: -335px;margin-right: 180px;">*</span>
                   {{ form.acctype(class="col-2") }}
                 </div></br>
                 <div class="form-row">
                     {{ form.accno.label(class="col-3",style="color: blue;")}}
-                    <span class="req" style="margin-left: -255px;margin-right: 100px;">*</span>
                     {{ form.accno(class="col-2") }}
                 </div></br></br>
                 <div class="form-row">
                   {{ form.period1.label(class="col-3",style="color: blue;")}}
-                  <span class="req" style="margin-left: -255px;margin-right: 100px;">*</span>
                   {{ form.period1(class="col-2") }}
               </div></br></br>
 
               <div class="form-row">
                 {{ form.period2.label(class="col-3",style="color: blue;")}}
-                <span class="req" style="margin-left: -255px;margin-right: 100px;">*</span>
                 {{ form.period2(class="col-2") }}
             </div></br></br>
 
@@ -60,7 +55,7 @@
                   {% for pdetails in accdetails %}
                   {% if accno == pdetails.account_number %}
                   <tr>
-                  <th scope="row">{{details.date}}</th>
+                  <th scope="row">{{pdetails.date}}</th>
                   <td>{{pdetails.narration}}
                   </td>
                   <td>{{pdetails.refno}}

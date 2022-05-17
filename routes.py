@@ -3,8 +3,8 @@ import csv,os
 from random import randint
 from flask import Flask, Response,redirect,render_template,request,url_for,session,flash,send_file
 from models import Account, Registration, db,Credentials,RequestPancard,cheq
-from forms import ChangePwdForm,ChequeForm,ForgotForm,NewpwdForm,RequestForm,StopchequeForm,PancardForm,EnterGstForm
-from forms import HomeForm,ACForm,StatusForm,ViewAcBalForm,UserForm,ATMForm,OTPForm,SignupForm,EnterPanForm,LoginForm,AmountMonthForm
+from forms import ChangePwdForm,ChequeForm,ForgotForm,NewpwdForm,RequestForm,StopchequeForm,PancardForm,EnterGstForm,FundsTransferForm,FdForm,VerifyForm
+from forms import HomeForm,ACForm,StatusForm,ViewAcBalForm,UserForm,ATMForm,OTPForm,SignupForm,EnterPanForm,LoginForm,AmountMonthForm,QuickTransferForm
 from getOTP import *
 from werkzeug.security import generate_password_hash
 import datetime
@@ -16,7 +16,7 @@ from flask_sqlalchemy import SQLAlchemy
 # Create instance from Flask class
 app = Flask(__name__)
 
-ENV = 'prod'
+ENV = 'dev'
 if ENV == 'dev':
     app.debug = True
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:dbpassword@localhost:5432/Online-Banking'
@@ -37,7 +37,7 @@ success_page = 'success.html'
 v = 'view.html'
 vac = 'view_ac_bal.html'
 ac5 = 'ac5years.html' 
-ymd = "'%Y-%m-%d'"
+ymd = '%Y-%m-%d'
 
 
 def checkparam1(param):
@@ -102,10 +102,16 @@ def success(param):
     elif param == 'pancard' or param =='forgot_pwd':
         return checkparam2(param)
     else:
+        if param=='quick':
+            msg = "Quick transfer done successfully."
+            return render_template(success_page,msg=msg)
         if param == 'newpwd'and 'forgot_form' not in session:
                 return redirect(url_for('forgot_pwd'))
         elif param == 'newpwd'and 'forgot_form' in session:
             msg = "Password updated successfully."
+            return render_template(success_page,msg=msg)
+        elif param == 'verify':
+            msg = "Transfer done successfully."
             return render_template(success_page,msg=msg)
         else:
             msg = checkparam3(param)
@@ -185,6 +191,18 @@ def otp(param):
                 return redirect(url_for('atm'))
             elif param == 'forgot_pwd':
                 return redirect(url_for('newpwd'))
+            else:
+                user = Registration.query.filter_by(username=session['username']).first()
+                accno = user.account_number
+                acc = Account.query.filter_by(account_number=accno).first()
+                if param == 'verify':
+                    acc.balance = int(acc.balance)-int(session['funds_form']['amt'])
+                elif param == 'verify1':
+                    acc.balance = int(acc.balance)-int(session['quick_form']['amountq'])
+                    acc1 = Account.query.filter_by(account_number=session['quick_form']['benaccno']).first()
+                    acc1.balance = int(acc1.balance)-int(session['quick_form']['amountq'])
+                db.session.commit()
+                return redirect(url_for('success',param='verify'))
 
 @app.route("/register",methods=['GET','POST'])
 def register():
@@ -218,11 +236,11 @@ def pancard():
     elif request.method == 'POST':
         form = PancardForm(request.form)
         form.username.data = session['username']
-        if form.validate()==False:
-            return render_template('pancard.html',form=form)
-        else:
-            session['pan_card_form'] = form.data
-            return redirect(url_for('panenter'))
+        # if form.validate()==False:
+        #     return render_template('pancard.html',form=form)
+        # else:
+        session['pan_card_form'] = form.data
+        return redirect(url_for('panenter'))
     
 
 @app.route("/panenter",methods=['GET','POST'])
@@ -245,11 +263,11 @@ def panenter():
         user = Registration.query.filter_by(username=uname).first()
         cifno = user.cif_number
         accno = user.account_number
-        if form.validate() == False:
-            return render_template('panenter.html',form=form,details=[accno,cifno])
-        else:
-            session['pan_enter_form'] = form.data
-            return redirect(url_for('confirmpan'))
+        # if form.validate() == False:
+        #     return render_template('panenter.html',form=form,details=[accno,cifno])
+        # else:
+        session['pan_enter_form'] = form.data
+        return redirect(url_for('confirmpan'))
     
 
 @app.route("/confirmpan",methods=['GET','POST'])
@@ -267,9 +285,12 @@ def confirmpan():
         user = Registration.query.filter_by(username=username).first()
         cifno = user.cif_number
         return render_template('confirmpan.html',details=[username,cifno])
+
+
+
        
 @app.route("/entergst",methods=['GET','POST'])
-def gst():
+def entergst():
     if request.method == 'POST':
         form = EnterGstForm(request.form) 
         if form.validate() == False:
@@ -395,11 +416,14 @@ def acc():
             return render_template(ac5,form=form)        
         acc = Registration.query.filter_by(username=session['username']).first()
         accno = acc.account_number
-        curr = datetime.datetime.strptime(request.form['period'], ymd)
+        print(accno)
+        curr = datetime.datetime.strptime(request.form['period'], ymd).date()
         lastyear = curr.year-5
         lastmon = curr.month
         lastday = curr.day
-        last = datetime.date(lastyear,lastmon,lastday)
+        
+        last = datetime.datetime(lastyear,lastmon,lastday).date()
+        print(last,curr)
         accdetails = Account.query.filter(Account.date.between(last,curr)).all()
         return render_template(ac5,form=form,accdetails=accdetails,accno = accno)
 
@@ -449,7 +473,7 @@ def view():
         if form.validate() == False:
             return render_template(v,form=form)
         session['cheqnum']=form.cheqnum.data
-        acc= cheq.query.filter_by(cheqnum = session['cheqnum']).first()
+        acc = cheq.query.filter_by(cheqnum = session['cheqnum']).first()
         bal=acc.status
         return render_template(v,form=form,bal=bal)    
     elif request.method == 'GET':
@@ -482,13 +506,100 @@ def curprev():
         
         acc = Registration.query.filter_by(username=session['username']).first()
         accno = acc.account_number
-        period1 = datetime.datetime.strptime(request.form['period1'], ymd)
-        period2 = datetime.datetime.strptime(request.form['period2'], ymd)
+        period1 = datetime.datetime.strptime(request.form['period1'], ymd).date()
+        period2 = datetime.datetime.strptime(request.form['period2'], ymd).date()
         if(period2.year - period1.year <=1 and period2.month-period1.month<=1):
             accdetails = Account.query.filter(Account.date.between(period1,period2)).all()
             print(accdetails)
             return render_template(prevcur,form=form,accdetails=accdetails,accno = accno)
         else:
             return render_template(prevcur,form=form)
+            
+@app.route("/quick",methods=['GET','POST'])
+def quick():
+     if request.method == 'GET':
+        form =  QuickTransferForm() 
+        return render_template('quicktransfer.html',form=form)
+     elif request.method == 'POST':
+        form =  QuickTransferForm(request.form)
+        if form.validate() == False:
+            return render_template('quicktransfer.html',form=form)
+        else:
+            session['quick_form'] = form.data
+            return redirect(url_for('verify1'))
+
+@app.route("/funds",methods=['GET','POST'])
+def funds():
+    if request.method == 'GET':
+        if 'login_form' not in session:
+            return redirect(url_for('login'))
+        form = FundsTransferForm()
+        acc = Registration.query.filter_by(username=session['username']).all()
+        return render_template("funds.html",form=form,userdetails=acc,user=session['username'])
+    elif request.method == 'POST':
+        form = FundsTransferForm(request.form) 
+        if form.validate() == False:
+            return render_template('funds.html',form=form)
+        else:
+            session['funds_form'] = form.data
+            return  redirect(url_for('verify'))
+
+@app.route("/viewfdsummary",methods=['GET','POST'])
+def viewfdsummary():
+    if request.method == 'POST':
+        form = FdForm(request.form) 
+        if form.validate() == False:
+            return render_template('viewfdsummary',form=form)
+        return render_template('viewfdsummary.html',form=form)    
+    elif request.method == 'GET':
+        form = FdForm()    
+        return render_template('viewfdsummary.html',form=form)
+
+@app.route("/verify",methods=['GET','POST'])
+def verify():
+    if request.method == 'GET':
+        if 'login_form' not in session:
+            return redirect(url_for('login'))
+        form = VerifyForm()
+        acc = Registration.query.filter_by(username=session['username']).first()
+        funds_form = session['funds_form']
+        accno = acc.account_number
+        acctype = funds_form['acctype']
+        branchcode = acc.branch_code
+        amt = funds_form['amt']
+        purpose = funds_form['purpose']
+        accdetails = [accno,acctype,branchcode,amt,purpose]
+        return render_template("verify.html",form=form,details=accdetails)
+    elif request.method == 'POST':
+        form = VerifyForm(request.form)
+        session['verify_form'] = form.data
+        session['verify_form']['phone'] = 9515409242
+        return_otp(session['verify_form'])
+        return redirect(url_for('otp',param='verify'))
+
+@app.route("/verify1",methods=['GET','POST'])
+def verify1():
+    if request.method == 'GET':
+        if 'login_form' not in session:
+            return redirect(url_for('login'))
+        form = VerifyForm()
+        acc = Registration.query.filter_by(username=session['username']).first()
+        quick_form = session['quick_form']
+        accno = quick_form['accnum']
+        branchcode = acc.branch_code
+        amt = quick_form['amountq']
+        benname = quick_form['benname']
+        benaccno = quick_form['benaccno']
+        purpose = quick_form['purpose']
+        accdetails = [accno,branchcode,amt,benname,benaccno,purpose]
+        return render_template("verify1.html",form=form,details=accdetails)
+    elif request.method == 'POST':
+        form = VerifyForm(request.form)
+        session['verify1_form'] = form.data
+        session['verify1_form']['phone'] = 9515409242
+        return_otp(session['verify1_form'])
+        return redirect(url_for('otp',param='verify1'))
+
 if __name__ == "__main__": 
     app.run(debug=True) 
+

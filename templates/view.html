@@ -14,21 +14,18 @@
           <div class="card-header" style="height:4rem; background-color: rgb(212, 184, 111);">
             <h3 style="color: black;">View Cheque Status</h3>
           </div>
-          <div style="font-size: medium;">
-            <br>
-            <span class="req" style="margin-left: 20px;">*</span>Required
-          </div>
+
           <div class="card-body" style="font-size: large;" >
             <form id="myForm1" method="POST" action="/view" novalidate>
               {{ form.hidden_tag }}
               <div class="form-row">
                 {{ form.acctype.label(class="col-2",style="color: blue;")}}
-                <span class="req" style="margin-left: -90px;margin-right: 85px;">*</span>
+                
                 {{ form.acctype(style="width: 375px;")}}
               </div></br></br>
               <div class="form-row">
                 {{ form.cheqnum.label(class="col-2",style="color: blue;")}}
-                <span class="req" style="margin-left: -20px;margin-right: 13px;">*</span>
+                
                 {{ form.cheqnum(style="width: 375px;")}}
               </div></br></br>
 

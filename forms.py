@@ -1,7 +1,7 @@
 from flask_wtf import Form,RecaptchaField
 from wtforms import StringField,SubmitField,SelectField,RadioField,BooleanField,PasswordField,DateField
 from wtforms.validators import DataRequired,InputRequired,Length,EqualTo,ValidationError
-from models import Credentials,Registration,RequestPancard
+from models import Credentials,Registration,RequestPancard,cheq
 from getOTP import *
 from werkzeug.security import generate_password_hash,check_password_hash
 
@@ -372,6 +372,14 @@ def valid_account():
         if user is None:
             raise ValidationError("Account number does not exist")
     return _valid_account
+
+def valid_cheque():
+    def _valid_cheque(form,field):
+        cheqno = field.data
+        user = cheq.query.filter_by(cheqnum = cheqno).first()
+        if user is None:
+            raise ValidationError("Cheque number does not exist")
+    return _valid_cheque
     
 class ChequeForm(Form):
     ac=StringField(accno, validators=[DataRequired("Please enter your Account Number."),valid_account()])
@@ -381,8 +389,8 @@ class ChequeForm(Form):
     submit = SubmitField("Submit")
 
 class StopchequeForm(Form):
-    SCheqNum = StringField('Start Cheque Number',validators=[DataRequired('Start Cheque Number is required')])
-    ECheqNum = StringField('End Cheque Number',validators=[DataRequired('End Cheque Number is reqired')])
+    SCheqNum = StringField('Start Cheque Number',validators=[DataRequired('Start Cheque Number is required'),valid_cheque()])
+    ECheqNum = StringField('End Cheque Number',validators=[DataRequired('End Cheque Number is reqired'),valid_cheque()])
     Reason = StringField('Reason :',validators=[DataRequired('Reason is required')])
     acctype = SelectField(acctype,validators=[DataRequired()], choices=options)
     submit = SubmitField('Submit')
@@ -402,10 +410,10 @@ class NewpwdForm(Form):
 # *********************************************************
 
 class RequestForm(Form):
-    ano = StringField(accno,validators=[DataRequired(),valid_account()])
-    bname= StringField('Benificiary Name',validators=[DataRequired()])
-    amou=StringField('DD Amount',validators=[DataRequired()])
-    place=StringField('Place to be drawn at',validators=[DataRequired()])
+    ano = StringField(accno,validators=[DataRequired('Account Number is Required'),valid_account()])
+    bname= StringField('Benificiary Name',validators=[DataRequired('Benificiary name is required.')])
+    amou=StringField('DD Amount',validators=[DataRequired('Amount is Required')])
+    place=StringField('Place to be drawn at',validators=[DataRequired('Place to be Drawn is required')])
     submit = SubmitField('Request')
 
 
@@ -420,12 +428,12 @@ class ACForm(Form):
     back = SubmitField('Back')
 
 class StatusForm(Form):
-    cheqnum = StringField('Cheque Number',validators=[DataRequired('Cheque Number is required')])
-    acctype = SelectField(acctype,validators=[DataRequired()], choices=['--Select Type of Account--','Savings Account','Current Account'])
+    cheqnum = StringField('Cheque Number',validators=[DataRequired('Cheque Number is required'),valid_cheque()])
+    acctype = SelectField(acctype,validators=[DataRequired()], choices=options)
     view = SubmitField('View')
 
 class ViewAcBalForm(Form):
-    ac=StringField(accno, validators=[DataRequired("Please enter your Account Number.")])
+    ac=StringField(accno, validators=[DataRequired("Please enter your Account Number."),valid_account()])
     submit = SubmitField("View Balance")
 
 class AmountMonthForm(Form):
@@ -435,6 +443,31 @@ class AmountMonthForm(Form):
     period2 = DateField('To',validators=[DataRequired()])
     submit = SubmitField('Show')
     back = SubmitField('Back')
+
+class QuickTransferForm(Form):
+    accnum = StringField('Account Number',validators=[DataRequired(),valid_account()])
+    amountq= StringField('Balance',validators=[DataRequired()])
+    benname=StringField('Benificiary Name',validators=[DataRequired()])
+    benaccno=StringField('Beneficiary account number',validators=[DataRequired()])
+    rebenaccno=StringField('Re enter Beneficiary account number',validators=[DataRequired(),EqualTo('benaccno', message='Both Beneficiary account number fields must be equal!')])
+    purpose=StringField('Purpose',validators=[DataRequired()])
+    submit = SubmitField('Proceed')
+    
+
+class FundsTransferForm(Form):
+    amt = StringField('Amount',validators=[DataRequired()])
+    purpose = StringField('Purpose',validators=[DataRequired()])
+    acctype = SelectField(acctype,validators=[DataRequired()], choices=options)
+    accno = StringField('Select Account Number')
+    submit = SubmitField('Proceed')
+
+class FdForm(Form):
+    accno = StringField('Account Number :',validators=[DataRequired(),valid_account()])
+    download = SubmitField('Download Fixed Deposit Summary')
+
+class VerifyForm(Form):
+    confirm = SubmitField('Download Fixed Deposit Summary')
+
 # ********************************************************************
 class HomeForm(Form):
     logout = SubmitField('Log Out')

@@ -1,24 +1,27 @@
 {% extends "layout.html" %}
-
 {% block content %}
-{% for field, errors in form.errors.items() %}
+
+<main class="container">
+  {% for field, errors in form.errors.items() %}
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
         {{ ', '.join(errors) }}
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-{% endfor %}
-<div class="div3">
-    <div class="card-header" style="height:4rem; background-color: rgb(212, 184, 111);margin-bottom: 10px;">
-        <h3 style="color: black;">View Account Balance</h3>
-      </div>
+    {% endfor %}
+        <div class="section-content">
+          <div class="card-header" style="height:4rem; background-color: rgb(212, 184, 111);">
+            <h3 style="color: black;">View Account Balance</h3>
+          </div>
+
+          <div class="card-body" style="font-size: large;" >
     <form name="acBal" action="/view_ac_bal" method="POST" novalidate>
         {{ form.hidden_tag }}
         <br>
         <div class="form-row" style="font-size: large;">
             {{ form.ac.label(class="col-4",style="color: blue;")}}
-            <span class="req" style="margin-left: -285px;">*</span>
+            
             {{ form.ac(style="width: 375px;")}}
         </div></br></br>
         <div style="text-align: center;">

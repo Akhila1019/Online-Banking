@@ -21,6 +21,29 @@ class Credentials(db.Model):
     def check_password(self,password):
         return check_password_hash(self.pwdhash,password)
 
+    def __repr__(self):
+        return f'<User: {self.username}>'
+
+    @property
+    def is_authenticated(self):
+        """Return True if the user has been successfully registered."""
+        return True
+
+    @property
+    def is_active(self):
+        """Always True, as all users are active."""
+        return True
+
+    @property
+    def is_anonymous(self):
+        """Always False, as anonymous users aren't supported."""
+        return False
+
+    def is_password_correct(self, password_plaintext: str):
+        return check_password_hash(self.pwdhash, password_plaintext)
+
+
+
 class Registration(db.Model):
     __tablename__ = 'users'
     username = db.Column(db.String(100),primary_key = True)
@@ -39,7 +62,15 @@ class Registration(db.Model):
         self.country = country
         self.phone = phone
         self.facility = facility
-        
+    
+    def test_new_user_with_fixture(new_user):
+        """
+        GIVEN a User model
+        WHEN a new User is created
+        THEN check the email and password_hashed fields are defined correctly
+        """
+        assert new_user.username == 'sruthi'
+        assert new_user.account_number != '1234567890'
 
 class RequestPancard(db.Model):
     __tablename__ = 'panrequest'
@@ -98,3 +129,19 @@ class Account(db.Model):
         self.deposit = deposit
         self.balance = balance
         
+class Fdsummary(db.Model):
+
+    tablename = 'fdsummary'
+    fd_no =db.Column(db.VARCHAR(3),primary_key=True) 
+    account_number=db.Column(db.VARCHAR(50))
+    date =db.Column(db.DATE)
+    Amount =db.Column(db.Numeric(8,2))
+    Validity_in_months =db.Column(db.Numeric(4))
+    def init(self,fd_no,account_number,date,Amount,Validity_in_months):
+        self.fd_no=fd_no
+        self.account_number=account_number
+        self.date=date
+        self.Amount=Amount
+        self.Validity_in_months=Validity_in_months
+
+

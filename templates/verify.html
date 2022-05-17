@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<main class="container">
+  {% for field, errors in form.errors.items() %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ ', '.join(errors) }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+        <div class="section-content">
+          <div class="card-header" style="height:4rem; background-color: rgb(212, 184, 111);">
+            <h3 style="color: black;">Verify details and confirm this transaction</h3>
+          </div>
+          
+          <div class="card-body" style="font-size: large;" >
+            <form id="myForm1" method="POST" action="/verify" novalidate>
+              {{ form.hidden_tag }}
+              <div class="form-row">
+                <p class="col-3" style="color: blue;">SBI Account Number </p>  
+                <div style="margin-top: -40px;"><strong style="margin-left: 240px;">{{ details[0]}}</b></div></br>
+                <p class="col-3" style="color: blue;">Account type </p>  
+                <div style="margin-top: -40px;"><strong style="margin-left: 240px;">{{ details[1] }}</b></div></br>
+                <p class="col-3" style="color: blue;">SBI Branch </p>  
+                <div style="margin-top: -40px;"><strong style="margin-left: 255px;">{{ details[2] }}</b></div></br>
+                <p class="col-3" style="color: blue;">Total Debit Amount </p>  
+                <div style="margin-top: -40px;"><strong style="margin-left: 240px;">{{ details[4] }}</b></div></br>
+                <p class="col-3" style="color: blue;">Purpose </p>  
+                <div style="margin-top: -40px;"><strong style="margin-left: 240px;">{{ details[5] }}</b></div></br>
+                
+            </div></br>
+                <button type="submit" class="btn btn-primary">Confirm</button>
+            </form>
+        </div>
+            <button class="btn btn-danger" style="margin-top: -68px;margin-left: 120px ;" onclick="location.href='home'">Cancel</button>
+          
+        </div>    
+    </main>
+
+{% endblock %}

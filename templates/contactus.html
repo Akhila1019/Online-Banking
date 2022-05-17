@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block content %}
+            {% for field, errors in form.errors.items() %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ ', '.join(errors) }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endfor %}
+            <div class="card-body" style="font-size: large;" >
+              <form id="myForm3" action="/contactus" method="POST">
+                        <h3>1.Email Address:</h3>
+                        <h3>koppolusruthi2002@gmail.com</h3>
+            
+                      
+                      <h3>2.Phone Number:</h3>
+                      <h3>6302100199</h3>
+                   
+                    <h3>3.Address:</h3>
+                    <h3>Amrita School of Engineering,Amrita Vishwa Vidyapeetham,Coimbatore.</h3>
+                </form>
+              </div>
+      {% endblock %}
